@@ -1,0 +1,51 @@
+<p>
+  Name: {{nameField.value}}  <!--Podemos ver los cambios de la propiedad inmediatamente gracias a la reactividad-->
+  <input type="text" [formControl]="nameField"> <!--Con esto atamos el control con la propiedad que creeamos en la logica-->
+
+  <button (click)="getValue()">Mostrar</button>
+
+  <!-- <code>
+    <pre>
+      {{nameField | json}}
+    </pre>
+  </code> -->
+   <!-- Cuando usamos la estructura de code y pre y ademas le aplicamos un pipe Json a un formcontrol, vamos a poder ver todo lo
+  que contiene y se vera organizado de esta manera:  -->
+
+</p>
+
+<p>
+  E-mail: {{emailField.value}}
+  <input type="email" [formControl]="emailField">
+</p>
+
+<p>
+  Telefono: {{phoneField.value}}
+  <input type="tel" [formControl]="phoneField">
+</p>
+
+<p>
+  Color: {{colorField.value}}
+  <input type="color" [formControl]="colorField">
+</p>
+
+<p>
+  Fecta: {{dateField.value}}
+  <input type="date" [formControl]="dateField">
+</p>
+
+<p>
+  Age: {{ageField.value}}
+  <input type="number" [formControl]="ageField">
+</p>
+
+<p>
+  Observaciones: {{textField.value}}
+  <textarea [formControl]="textField"></textarea>
+</p>
+
+<p>
+  Img: {{imgField.value}}
+  <input type="file" [formControl]="imgField">
+</p>
+

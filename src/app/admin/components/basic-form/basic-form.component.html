@@ -1,51 +1,160 @@
-<p>
-  Name: {{nameField.value}}  <!--Podemos ver los cambios de la propiedad inmediatamente gracias a la reactividad-->
-  <input type="text" [formControl]="nameField"> <!--Con esto atamos el control con la propiedad que creeamos en la logica-->
+<form [formGroup]="form" (ngSubmit)="saveForm($event)">
+  <div formGroupName="fullName">
+    <p>
+      Name:{{nameField.valid}} <!--Ahora vamos a validar si es valido-->
 
-  <button (click)="getValue()">Mostrar</button>
+      <input
+      [class.is-valid]="isNameFieldValid"
+      [class.is-invalid]="isNameFieldInValid"
+      type="text"
+      formControlName="name"> <!--Cuando esta en un formGroup cambiamos el como se agrupan los datos-->
+      <!-- <button [disabled]="nameField.invalid" (click)="getValue()">Mostrar</button> -->
+    </p>
+    <div class="messages" [class.active]="isNameFieldInValid">
+      <p>
+        <strong *ngIf=" nameField.hasError('required')">Este campo es requerido</strong>
+      </p>
+      <p>
+       <strong *ngIf="nameField.hasError('maxlength')">El valor maximo permitido es de 10</strong>
+      </p>
+      <p>
+        <strong *ngIf="nameField.hasError('pattern')">Debe ser un nombre valido sin caracteres especiales</strong>
+       </p>
+    </div>
 
-  <!-- <code>
-    <pre>
-      {{nameField | json}}
-    </pre>
-  </code> -->
-   <!-- Cuando usamos la estructura de code y pre y ademas le aplicamos un pipe Json a un formcontrol, vamos a poder ver todo lo
-  que contiene y se vera organizado de esta manera:  -->
+    <p>
+      LastName:{{lastField.valid}} <!--Ahora vamos a validar si es valido-->
 
-</p>
+      <input
+      [class.is-invalid]="isLastNameFieldInValid"
+      type="text"
+      formControlName="lastName"> <!--Cuando esta en un formGroup cambiamos el como se agrupan los datos-->
+      <!-- <button [disabled]="nameField.invalid" (click)="getValue()">Mostrar</button> -->
+    </p>
+    <div class="messages" [class.active]="isLastNameFieldInValid">
+      <p>
+        <strong *ngIf=" lastField.hasError('required')">Este campo es requerido</strong>
+      </p>
+      <p>
+       <strong *ngIf="lastField.hasError('maxlength')">El valor maximo permitido es de 10</strong>
+      </p>
+      <p>
+        <strong *ngIf="lastField.hasError('pattern')">Debe ser un nombre valido sin caracteres especiales</strong>
+       </p>
+    </div>
+
+
+  </div>
+
 
 <p>
   E-mail: {{emailField.value}}
-  <input type="email" [formControl]="emailField">
+  <input type="email" formControlName="email">
 </p>
+<div class="messages" [class.active]="isEmailInValid">
+  <p>
+    <strong *ngIf="emailField.hasError('required')">Este campo es requerido</strong>
+  </p>
+  <p>
+    <strong *ngIf="emailField.hasError('email')">Debe ser un email valido</strong>
+  </p>
+</div>
 
 <p>
   Telefono: {{phoneField.value}}
-  <input type="tel" [formControl]="phoneField">
+  <input type="tel" formControlName="phone">
 </p>
+<div class="messages" [class.active]="isPhoneFieldInValid">
+  <p>
+    <strong *ngIf="phoneField.touched && phoneField.hasError('required')">Este campo es requerido</strong>
+  </p>
+</div>
 
 <p>
   Color: {{colorField.value}}
-  <input type="color" [formControl]="colorField">
+  <input type="color" formControlName="color">
 </p>
 
 <p>
   Fecta: {{dateField.value}}
-  <input type="date" [formControl]="dateField">
+  <input type="date" formControlName="date">
 </p>
 
 <p>
   Age: {{ageField.value}}
-  <input type="number" [formControl]="ageField">
+  <input type="number" formControlName="age">
 </p>
+<div class="messages" [class.active]="IsAgeInValid">
+  <p>
+    <strong *ngIf="ageField.hasError('required')">Este campo es requerido</strong>
+  </p>
+  <p>
+    <strong *ngIf="ageField.hasError('min')">Debe ser mayor a 18 años</strong>
+  </p>
+  <p>
+    <strong *ngIf="ageField.hasError('max')">Debe ser menor a 80 años</strong>
+  </p>
+</div>
 
 <p>
   Observaciones: {{textField.value}}
-  <textarea [formControl]="textField"></textarea>
+  <textarea formControlName="text"></textarea>
 </p>
 
 <p>
   Img: {{imgField.value}}
-  <input type="file" [formControl]="imgField">
+  <input type="file" formControlName="img">
 </p>
+
+<p>
+  category: {{categoryField.value}}
+  <select formControlName="category">
+    <option value="category-1">cat 1</option>
+    <option value="category-2">cat 2</option>
+    <option value="category-3">cat 3</option>
+  </select>
+</p>
+
+<p>
+  Tags: {{tagField.value}}
+  <select formControlName="tag" multiple>
+    <option value="tag-1">tag 1</option>
+    <option value="tag-2">tag 2</option>
+    <option value="tag-3">tag 3</option>
+  </select>
+</p>
+
+<p>
+  Agreed: {{agreedField.value}}
+  <input type="checkbox" formControlName="agreed">
+</p>
+<div class="messages" [class.active]="isAgreedFieldInValid">
+  <p>
+    <strong *ngIf="agreedField.hasError('required')">Debes aceptar el contrato</strong>
+  </p>
+</div>
+
+<p>
+  Gender: {{genderField.value}}
+  <label>
+    <input name="gender" type="radio" value="male" formControlName="gender">
+    Male
+  </label>
+  <label>
+    <input name="gender" type="radio" value="female" formControlName="gender">
+    FeMale
+  </label>
+  <label>
+    <input name="gender" type="radio" value="other" formControlName="gender">
+    Other
+  </label>
+</p>
+
+<p>
+  <button type="submit">Enviar</button>
+</p>
+
+</form>
+
+
 

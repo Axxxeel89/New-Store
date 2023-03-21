@@ -1,160 +1,156 @@
 <form [formGroup]="form" (ngSubmit)="saveForm($event)">
-  <div formGroupName="fullName">
-    <p>
-      Name:{{nameField.valid}} <!--Ahora vamos a validar si es valido-->
+  <div class="form">
+    <div formGroupName="fullName" class="embebed">
+      <div>
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label> Firts Name:{{nameField.valid}}</mat-label>
+          <input matInput placeholder="Add Name" type="text" formControlName="name">
+          <mat-icon matSuffix *ngIf="isNameFieldValid" style="color:rgb(0, 255, 0);">done</mat-icon>
+          <mat-icon matSuffix *ngIf="isNameFieldInValid" style="color:rgb(255, 0, 0);">cancel</mat-icon>
+          <mat-hint>You need add your First name</mat-hint>
+          <mat-error *ngIf="nameField.hasError('required')" >
+            Este campo es requerido
+          </mat-error>
+          <mat-error *ngIf="nameField.hasError('maxlength')" >
+            El valor maximo permitido es de 15
+          </mat-error>
+          <mat-error *ngIf="nameField.hasError('pattern')" >
+            Debe ser un nombre valido sin numeros o caracteres especiales
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-      <input
-      [class.is-valid]="isNameFieldValid"
-      [class.is-invalid]="isNameFieldInValid"
-      type="text"
-      formControlName="name"> <!--Cuando esta en un formGroup cambiamos el como se agrupan los datos-->
-      <!-- <button [disabled]="nameField.invalid" (click)="getValue()">Mostrar</button> -->
-    </p>
-    <div class="messages" [class.active]="isNameFieldInValid">
-      <p>
-        <strong *ngIf=" nameField.hasError('required')">Este campo es requerido</strong>
-      </p>
-      <p>
-       <strong *ngIf="nameField.hasError('maxlength')">El valor maximo permitido es de 10</strong>
-      </p>
-      <p>
-        <strong *ngIf="nameField.hasError('pattern')">Debe ser un nombre valido sin caracteres especiales</strong>
-       </p>
+      <div>
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label> Last Name:{{lastField.valid}}</mat-label>
+          <input matInput placeholder="Add Name" type="text" formControlName="lastName">
+          <mat-icon matSuffix *ngIf="isNameFieldValid" style="color:rgb(0, 255, 0);">done</mat-icon>
+          <mat-icon matSuffix *ngIf="isLastNameFieldInValid" style="color:rgb(255, 0, 0);">cancel</mat-icon>
+          <mat-hint>You need add your Last name</mat-hint>
+          <mat-error *ngIf="nameField.hasError('required')" >
+            Este campo es requerido
+          </mat-error>
+          <mat-error *ngIf="nameField.hasError('maxlength')" >
+            El valor maximo permitido es de 15
+          </mat-error>
+          <mat-error *ngIf="nameField.hasError('pattern')" >
+            Debe ser un nombre valido sin numeros o caracteres especiales
+          </mat-error>
+        </mat-form-field>
+      </div>
     </div>
 
-    <p>
-      LastName:{{lastField.valid}} <!--Ahora vamos a validar si es valido-->
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>  E-mail:{{emailField.valid}}</mat-label>
+      <input matInput placeholder="Add Name" type="text" formControlName="email">
+      <mat-icon matSuffix *ngIf="isNameFieldValid" style="color:rgb(0, 255, 0);">done</mat-icon>
+      <mat-icon matSuffix *ngIf="isEmailInValid" style="color:rgb(255, 0, 0);">cancel</mat-icon>
+      <mat-hint>You need add your E-mail</mat-hint>
+      <mat-error *ngIf="emailField.hasError('required')" >
+        Este campo es requerido
+      </mat-error>
+      <mat-error *ngIf="emailField.hasError('email')" >
+        Debe ser un email valido
+      </mat-error>
+    </mat-form-field>
 
-      <input
-      [class.is-invalid]="isLastNameFieldInValid"
-      type="text"
-      formControlName="lastName"> <!--Cuando esta en un formGroup cambiamos el como se agrupan los datos-->
-      <!-- <button [disabled]="nameField.invalid" (click)="getValue()">Mostrar</button> -->
-    </p>
-    <div class="messages" [class.active]="isLastNameFieldInValid">
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>  Phone:{{phoneField.valid}}</mat-label>
+      <input matInput placeholder="Add Name" type="text" formControlName="phone">
+      <mat-icon matSuffix *ngIf="isNameFieldValid" style="color:rgb(0, 255, 0);">done</mat-icon>
+      <mat-icon matSuffix *ngIf="isPhoneFieldInValid" style="color:rgb(255, 0, 0);">cancel</mat-icon>
+      <mat-hint>You need add your phone</mat-hint>
+      <mat-error *ngIf="emailField.hasError('required')" >
+        Este campo es requerido
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>  Color: {{colorField.value}}</mat-label>
+      <input matInput type="color" formControlName="color">
+      <mat-hint>Choose a color</mat-hint>
+    </mat-form-field>
+
+  <mat-form-field class="example-full-width" color="accent" appearance="fill">
+    <mat-label>Date</mat-label>
+    <input matInput [matDatepicker]="picker2" formControlName="date">
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+    <mat-datepicker #picker2 color="primary"></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>  Age: {{ageField.value}}</mat-label>
+    <input matInput placeholder="Add Name" type="text" formControlName="age">
+    <mat-icon matSuffix *ngIf="isNameFieldValid" style="color:rgb(0, 255, 0);">done</mat-icon>
+    <mat-icon matSuffix *ngIf="IsAgeInValid" style="color:rgb(255, 0, 0);">cancel</mat-icon>
+    <mat-hint>You need add your Last name</mat-hint>
+    <mat-error *ngIf="nameField.hasError('required')" >
+      Este campo es requerido
+    </mat-error>
+    <mat-error *ngIf="nameField.hasError('min')" >
+      Debe ser mayor a 18 años
+    </mat-error>
+    <mat-error *ngIf="nameField.hasError('max')" >
+      Debe ser menor a 80 años
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Observaciones: {{textField.value}}</mat-label>
+    <textarea matInput placeholder="Ex. It makes me feel..." formControlName="text"></textarea>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width" appearance="fill">
+    <!-- <mat-label> Choose a picture: {{imgField.value}}</mat-label> -->
+    <input matInput type="file" formControlName="img">
+    <mat-hint>Choose a picture</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>category: {{categoryField.value}}</mat-label>
+    <mat-select formControlName="category" >
+      <mat-option value="" disabled>Select option</mat-option>
+      <mat-option value="category-1">Option 1</mat-option>
+      <mat-option value="category-2">Option 2 </mat-option>
+      <mat-option value="category-3">Option 3</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Tags: {{tagField.value}}</mat-label>
+    <mat-select formControlName="tag" multiple >
+      <mat-option value="tag-1">Tag 1</mat-option>
+      <mat-option value="tag-2">Tag 2</mat-option>
+      <mat-option value="tag-3">Tag 3</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div>
+    <mat-checkbox class="example-margin" formControlName="agreed" >Agreed</mat-checkbox>
+    <br/>
+    <mat-hint>You need acept term and condicions</mat-hint>
+    <div class="messages" [class.active]="isAgreedFieldInValid">
       <p>
-        <strong *ngIf=" lastField.hasError('required')">Este campo es requerido</strong>
+        <strong *ngIf="agreedField.hasError('required')">Debes aceptar el contrato</strong>
       </p>
-      <p>
-       <strong *ngIf="lastField.hasError('maxlength')">El valor maximo permitido es de 10</strong>
-      </p>
-      <p>
-        <strong *ngIf="lastField.hasError('pattern')">Debe ser un nombre valido sin caracteres especiales</strong>
-       </p>
     </div>
+  </div>
 
+  <mat-radio-group aria-label="Select an option">
+    <mat-label>Gender: {{genderField.value}}</mat-label>
+    <mat-radio-button value="male">male</mat-radio-button>
+    <mat-radio-button value="female">female</mat-radio-button>
+    <mat-radio-button value="other">Other</mat-radio-button>
+  </mat-radio-group>
 
+  <p>
+    <button mat-raised-button color="primary" type="submit"><mat-icon matSuffix>save</mat-icon> Save</button>
+
+  </p>
   </div>
 
 
-<p>
-  E-mail: {{emailField.value}}
-  <input type="email" formControlName="email">
-</p>
-<div class="messages" [class.active]="isEmailInValid">
-  <p>
-    <strong *ngIf="emailField.hasError('required')">Este campo es requerido</strong>
-  </p>
-  <p>
-    <strong *ngIf="emailField.hasError('email')">Debe ser un email valido</strong>
-  </p>
-</div>
-
-<p>
-  Telefono: {{phoneField.value}}
-  <input type="tel" formControlName="phone">
-</p>
-<div class="messages" [class.active]="isPhoneFieldInValid">
-  <p>
-    <strong *ngIf="phoneField.touched && phoneField.hasError('required')">Este campo es requerido</strong>
-  </p>
-</div>
-
-<p>
-  Color: {{colorField.value}}
-  <input type="color" formControlName="color">
-</p>
-
-<p>
-  Fecta: {{dateField.value}}
-  <input type="date" formControlName="date">
-</p>
-
-<p>
-  Age: {{ageField.value}}
-  <input type="number" formControlName="age">
-</p>
-<div class="messages" [class.active]="IsAgeInValid">
-  <p>
-    <strong *ngIf="ageField.hasError('required')">Este campo es requerido</strong>
-  </p>
-  <p>
-    <strong *ngIf="ageField.hasError('min')">Debe ser mayor a 18 años</strong>
-  </p>
-  <p>
-    <strong *ngIf="ageField.hasError('max')">Debe ser menor a 80 años</strong>
-  </p>
-</div>
-
-<p>
-  Observaciones: {{textField.value}}
-  <textarea formControlName="text"></textarea>
-</p>
-
-<p>
-  Img: {{imgField.value}}
-  <input type="file" formControlName="img">
-</p>
-
-<p>
-  category: {{categoryField.value}}
-  <select formControlName="category">
-    <option value="category-1">cat 1</option>
-    <option value="category-2">cat 2</option>
-    <option value="category-3">cat 3</option>
-  </select>
-</p>
-
-<p>
-  Tags: {{tagField.value}}
-  <select formControlName="tag" multiple>
-    <option value="tag-1">tag 1</option>
-    <option value="tag-2">tag 2</option>
-    <option value="tag-3">tag 3</option>
-  </select>
-</p>
-
-<p>
-  Agreed: {{agreedField.value}}
-  <input type="checkbox" formControlName="agreed">
-</p>
-<div class="messages" [class.active]="isAgreedFieldInValid">
-  <p>
-    <strong *ngIf="agreedField.hasError('required')">Debes aceptar el contrato</strong>
-  </p>
-</div>
-
-<p>
-  Gender: {{genderField.value}}
-  <label>
-    <input name="gender" type="radio" value="male" formControlName="gender">
-    Male
-  </label>
-  <label>
-    <input name="gender" type="radio" value="female" formControlName="gender">
-    FeMale
-  </label>
-  <label>
-    <input name="gender" type="radio" value="other" formControlName="gender">
-    Other
-  </label>
-</p>
-
-<p>
-  <button type="submit">Enviar</button>
-</p>
-
 </form>
-
 
 

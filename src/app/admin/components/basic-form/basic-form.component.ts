@@ -143,7 +143,5 @@ export class BasicFormComponent implements OnInit {
   get isAgreedFieldInValid(){
     return this.agreedField.touched && this.agreedField.invalid
   }
-
-
 }
 

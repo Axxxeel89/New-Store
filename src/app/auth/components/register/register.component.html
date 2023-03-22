@@ -17,6 +17,11 @@
           <mat-form-field>
             <mat-label>Password</mat-label>
             <input placeholder="password" formControlName="password" matInput type="password">
+            <div *ngIf="form.get('password').touched && form.get('password').invalid">
+              <mat-error *ngIf="form.get('password').hasError('invalid_password')">
+                Debe tener al menos un numero
+              </mat-error>
+            </div>
           </mat-form-field>
         </div>
       </div>
@@ -24,7 +29,36 @@
         <div class="col-xs">
           <mat-form-field>
             <mat-label>Confirm Password</mat-label>
-            <input placeholder="password" formControlName="password" matInput type="password">
+            <input placeholder="password" formControlName="confirmPassword" matInput type="password">
+            <div *ngIf="form.get('confirmPassword').touched &&  form.errors">
+              <mat-error *ngIf="form.hasError('match_password')">
+                Los passwords no son iguales
+              </mat-error>
+            </div>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs">
+            <mat-label>Type: &nbsp;</mat-label>
+            <mat-radio-group formControlName="type" aria-label="Select an option">
+              <mat-radio-button value="company">Company</mat-radio-button>
+              <mat-radio-button value="customer">Customer</mat-radio-button>
+            </mat-radio-group>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field>
+            <mat-label>Company Name</mat-label>
+            <input placeholder="company" formControlName="companyName" matInput type="text">
+            <div *ngIf="form.get('companyName').touched && form.get('companyName')">
+              <mat-error *ngIf="form.hasError('required')">
+                Este campo es requerido
+              </mat-error>
+            </div>
           </mat-form-field>
         </div>
       </div>

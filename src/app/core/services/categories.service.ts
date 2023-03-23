@@ -17,6 +17,10 @@ export class CategoriesService {
     return this.http.get<Category[]>(`${environment.url_api}/categories/`)
   }
 
+  getCategories(id: string){
+    return this.http.get<Category>(`${environment.url_api}/categories/${id}`)
+  }
+
   // Partial<Category>, hacemos esto para que no ponga el Id como obligatorio.
   createCategory(data: Partial<Category>){
     return this.http.post<Category>(`${environment.url_api}/categories/`, data)

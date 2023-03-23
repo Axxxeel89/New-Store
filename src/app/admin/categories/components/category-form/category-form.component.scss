@@ -1,0 +1,18 @@
+.btn-upload {
+	& input[type=file] {
+		display: none;
+	}
+}
+
+img {
+	width: 400px;
+	box-sizing: content-box;
+}
+
+.contain__progress{
+  width: 400px;
+}
+
+.upload__cta{
+  margin: 20px 0;
+}

@@ -1,9 +1,3 @@
-<h1 class="category__title">Listado de categorias</h1>
-
-<div class="demo-button-container">
-  <button mat-raised-button routerLink="create" class="demo-button">
-    Add Category
-  </button>
 
 <table mat-table [dataSource]="listCategories" class="demo-table">
 
@@ -30,22 +24,12 @@
     <td mat-cell *matCellDef="let element">{{element.creationAt | date}}</td>
   </ng-container>
 
+
     <ng-container matColumnDef="updatedAt">
       <th mat-header-cell *matHeaderCellDef>Updated At</th>
       <td mat-cell *matCellDef="let element">{{element.updatedAt  | date}}</td>
     </ng-container>
 
-    <ng-container matColumnDef="functions" >
-      <th mat-header-cell *matHeaderCellDef>Functions</th>  <!--Function tiene nuestras funciones crud-->
-      <td mat-cell *matCellDef="let element">
-        <!--Pasamos el Id por parametro Url-->
-        <a mat-raised-button color="primary" [routerLink]="['edit', element.id]" style="margin-right: 5px;">Edit </a>
-        <button mat-raised-button color="warn" (click)="Delete(element.id)">Delet</button>
-      </td>
-      <!-- <td mat-cell *matCellDef="let element"><a href="">Delet</a></td> -->
-    </ng-container>
-
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>
-

@@ -22,6 +22,8 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatNativeDateModule} from '@angular/material/core'; //--> Nos permite mostrar el formato de fechas como lo maneja JS
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+
 
 @NgModule({
   declarations: [],
@@ -47,7 +49,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatStepperModule,
     MatNativeDateModule,
     MatDatepickerModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatProgressBarModule
   ],
   exports: [
     MatButtonModule,
@@ -70,7 +73,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatStepperModule,
     MatNativeDateModule,
     MatDatepickerModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatProgressBarModule
   ]
 })
 export class MaterialModule { }

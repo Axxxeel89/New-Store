@@ -1,7 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="save()">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Categoría</mat-card-title>
+      <mat-card-title> Crear Categoría</mat-card-title>
     </mat-card-header>
     <mat-card-content>
         <div class="row">
@@ -17,21 +17,35 @@
             </mat-form-field>
           </div>
         </div>
+
         <div class="row">
           <div class="col-xs">
-              <img width="200" *ngIf="imageField.value" [src]="imageField.value" alt="">
-              <!--Creamos una funcion y le enviamos el evento, que es en si la imagen -->
-              <input (change)="uploadFile($event)" type="file"> <!--Como la imagen la estamos seteando no es necesario agregar el formControlName-->
-              <div class="messages" *ngIf="imageField.touched && imageField.invalid">
-                <mat-error *ngIf="imageField.hasError('required')">
-                  Este campo es requerido
-                </mat-error>
-              </div>
+            <label class="btn-upload">
+              <picture>
+                <img *ngIf="imageField.value" [src]="imageField.value" alt="Imagen seleccionada por el usuario">
+              </picture><br/>
+               <!--Creamos el boton con un evento click que va a llamar al elemento que tiene el tag fileInput-->
+              <button type="button" mat-raised-button (click)="fileInput.click()" class="upload__cta">
+                <mat-icon aria-hidden="false" aria-label="Carga de archivo">cloud_upload</mat-icon>
+                Upload
+              </button>
+              <input type="file" #fileInput (change)="uploadFile($event)" accept=".jpg, .png" /> <!--Creamos el tag para #fileInput y llamamos al metodo uploadFile-->
+            </label>
+            <mat-error *ngIf="imageField.touched && imageField.invalid">
+              <ng-container *ngIf="imageField.hasError('required')">La imagen es requerida</ng-container>
+            </mat-error>
+            <!--Usamos el componente de material para crear la barra de progreso-->
+            <mat-progress-bar class="contain__progress" *ngIf="showProgressBar" mode="determinate" [value]="percentageProgressBar"></mat-progress-bar> <br/>
+            <strong *ngIf="showProgressBar">Name image: {{ filename }}</strong>
           </div>
         </div>
+
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button type="submit">Guardar categoría</button>
+      <button mat-raised-button type="submit">
+        <span *ngIf="!CategoryId">Guardar Categoria</span>
+        <span *ngIf="CategoryId">Editar Categoria</span>
+      </button>
     </mat-card-actions>
   </mat-card>
 

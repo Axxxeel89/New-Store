@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms'
 import { CategoriesService} from 'src/app/core/services/categories.service'  //--> Traemos el servicio de categories
-import { Router } from '@angular/router';
-import { finalize} from 'rxjs/operators' //->Este operador se encarga de avisar cuando se haga toda la carga
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { finalize, map} from 'rxjs/operators' //->Este operador se encarga de avisar cuando se haga toda la carga
 
 //firestorage
 import { AngularFireStorage } from '@angular/fire/compat/storage'; //-->Traemos el fireStorage para guardar la imagen
@@ -15,18 +15,31 @@ import { AngularFireStorage } from '@angular/fire/compat/storage'; //-->Traemos 
 export class CategoryFormComponent implements OnInit {
 
   form:FormGroup;
+  id: string;
+  CategoryId: string; //--> Creamos esta propiedad para guardar la información del Id que se va a recibir por url
+	percentageProgressBar = 0
+	showProgressBar = false
+	filename: string;
 
   constructor(
     private formBuilder:FormBuilder,
     private categoriesService:CategoriesService,
     private router:Router,
-    private FireStorage:AngularFireStorage
+    private FireStorage:AngularFireStorage,
+    private route: ActivatedRoute  //--> Hace que podamos leer los parametros que vienen en la ruta
   ) {
     this.buildForm();
   }
 
   ngOnInit(): void {
+    this.route.params.subscribe((params:Params) =>{
+      this.CategoryId = params.id; //-> params.id, el id es segun lo que le hayamos puesto en el routing.
+      if(this.CategoryId){
+        this.getCategory();
+      }
+    })
   }
+
 
   private buildForm(){
     this.form = this.formBuilder.group({
@@ -46,6 +59,10 @@ export class CategoryFormComponent implements OnInit {
   //Vamos a configurar el servicio para guardar una categoria.
   save(): void{
     if(this.form.valid){
+      if(this.CategoryId){
+        this.updateCategory();
+
+      }
       this.createCategory()
     }else{
       this.form.markAllAsTouched();
@@ -61,6 +78,28 @@ export class CategoryFormComponent implements OnInit {
     })
   }
 
+  //--> Creamos el metodo de editar.
+  private updateCategory(){
+    const data = this.form.value;
+    this.categoriesService.updateCategory(this.CategoryId, data)
+    .subscribe(rta => {
+      console.log(rta);
+      this.router.navigate(['./admin/categories'])
+    })
+  }
+
+
+  private getCategory(){
+    this.categoriesService.getCategories(this.CategoryId)
+    .subscribe(data => {
+      this.form.patchValue(data);
+      //-> De esta manera con el patchValue pasamos toda la data al form, si hace match nos copia la informacion automaticamente si es un formulario muy grande nos permite ahorrar tiempo
+
+      this,this.nameField.setValue(data.name)
+      //-Como opción podemos agregar tambien la data valor por valor si es lo que necesitamos.
+    })
+  }
+
   // nameGenerico:string =  this.generateUUID()
 
   uploadFile(event){
@@ -72,24 +111,41 @@ export class CategoryFormComponent implements OnInit {
 
     //Task basicamente es un observable, el cual va a estar validando los cambios.
 
-    task.snapshotChanges() //-> El nos indica cual es el momento exacto que va a recibir la imagen
-    .pipe(
-      finalize(() => { //--> Recordemos que finalize nos avisa cuando termina de hacer la carga
-        //->Obtenemos la url de la imagen y es un observable y para obtener el valor debemos suscribirnos
-        const urlImage$ = ref.getDownloadURL(); //->Al setear directamente no es necesario el formControlName en el formulario.
-        urlImage$.subscribe( url => {
-          console.log(url);
-          console.log(name);
-          this.imageField.setValue(url);
+    // task.snapshotChanges() //-> El nos indica cual es el momento exacto que va a recibir la imagen
+    // .pipe(
+    //   finalize(() => { //--> Recordemos que finalize nos avisa cuando termina de hacer la carga
+    //     //->Obtenemos la url de la imagen y es un observable y para obtener el valor debemos suscribirnos
+    //     const urlImage$ = ref.getDownloadURL(); //->Al setear directamente no es necesario el formControlName en el formulario.
+    //     urlImage$.subscribe( url => {
+    //       console.log(url);
+    //       console.log(name);
+    //       this.imageField.setValue(url);
 
-        })
+    //     })
+    //   })
+    // )
+    // .subscribe(rta =>{
+
+    // })
+
+    task.percentageChanges()
+    .pipe(map(Math.ceil))
+    .pipe(finalize(() => {
+      const urlImage = ref.getDownloadURL()
+      urlImage.subscribe(url => {
+        this.imageField.setValue(url)
+        this.filename = image.name;
+        console.log(url);
       })
-    )
-    .subscribe(rta =>{
-
+      this.showProgressBar = true
+    }))
+    .subscribe(per => {
+      this.percentageProgressBar = per
     })
 
   }
+
+
 
    generateUUID() {
     let d = new Date().getTime();

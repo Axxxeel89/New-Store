@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms'
-import { CategoriesService} from 'src/app/core/services/categories.service'  //--> Traemos el servicio de categories
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { finalize, map} from 'rxjs/operators' //->Este operador se encarga de avisar cuando se haga toda la carga
+
+//Models
+import { Category} from 'src/app/core/models/category.model'
 
 //firestorage
 import { AngularFireStorage } from '@angular/fire/compat/storage'; //-->Traemos el fireStorage para guardar la imagen
@@ -16,28 +18,33 @@ export class CategoryFormComponent implements OnInit {
 
   form:FormGroup;
   id: string;
-  CategoryId: string; //--> Creamos esta propiedad para guardar la información del Id que se va a recibir por url
-	percentageProgressBar = 0
+  percentageProgressBar = 0
 	showProgressBar = false
 	filename: string;
+  CategoryId: string; //--> Creamos esta propiedad para guardar la información del Id que se va a recibir por url
+  isNew: boolean = true; //-->Lo usaremos para saber si es un create o un edit
+
+  //Recordemos que para recuperar datos debemos tener el form.patchValue que es el que nos va a pasar la información al formulario para esto usaremos un set dentro de un input
+  //Ahora tenemos que category paso hacer un metodo.
+  @Input() set category(data: Category){
+    if(data){
+      this.isNew= false; //->Si es false entonces es un edit pasaremos este flag al metodo para que sepa distingir
+      this.form.patchValue(data)
+    }
+  }
+
+  @Output() create = new EventEmitter();
+  @Output() Update = new EventEmitter();
 
   constructor(
     private formBuilder:FormBuilder,
-    private categoriesService:CategoriesService,
-    private router:Router,
     private FireStorage:AngularFireStorage,
-    private route: ActivatedRoute  //--> Hace que podamos leer los parametros que vienen en la ruta
   ) {
     this.buildForm();
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe((params:Params) =>{
-      this.CategoryId = params.id; //-> params.id, el id es segun lo que le hayamos puesto en el routing.
-      if(this.CategoryId){
-        this.getCategory();
-      }
-    })
+    this.form.patchValue(this.category)
   }
 
 
@@ -59,46 +66,17 @@ export class CategoryFormComponent implements OnInit {
   //Vamos a configurar el servicio para guardar una categoria.
   save(): void{
     if(this.form.valid){
-      if(this.CategoryId){
-        this.updateCategory();
-
+      if(this.isNew){
+        this.create.emit(this.form.value)
       }
-      this.createCategory()
+      else{
+        this.Update.emit(this.form.value)
+      }
     }else{
       this.form.markAllAsTouched();
     }
   }
 
-  private createCategory(){
-    const data = this.form.value;
-    this.categoriesService.createCategory(data)
-    .subscribe(rta => {
-      console.log(rta);
-      this.router.navigate(['./admin/categories'])
-    })
-  }
-
-  //--> Creamos el metodo de editar.
-  private updateCategory(){
-    const data = this.form.value;
-    this.categoriesService.updateCategory(this.CategoryId, data)
-    .subscribe(rta => {
-      console.log(rta);
-      this.router.navigate(['./admin/categories'])
-    })
-  }
-
-
-  private getCategory(){
-    this.categoriesService.getCategories(this.CategoryId)
-    .subscribe(data => {
-      this.form.patchValue(data);
-      //-> De esta manera con el patchValue pasamos toda la data al form, si hace match nos copia la informacion automaticamente si es un formulario muy grande nos permite ahorrar tiempo
-
-      this,this.nameField.setValue(data.name)
-      //-Como opción podemos agregar tambien la data valor por valor si es lo que necesitamos.
-    })
-  }
 
   // nameGenerico:string =  this.generateUUID()
 
@@ -144,8 +122,6 @@ export class CategoryFormComponent implements OnInit {
     })
 
   }
-
-
 
    generateUUID() {
     let d = new Date().getTime();

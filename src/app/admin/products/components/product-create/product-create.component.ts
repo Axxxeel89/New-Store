@@ -7,6 +7,9 @@ import { finalize } from 'rxjs/operators';
 
 import { MyValidators } from './../../../../utils/validators';
 import { ProductsService } from './../../../../core/services/products/products.service';
+import { CategoriesService } from 'src/app/core/services/categories.service';
+import { Category } from 'src/app/core/models/category.model'
+
 
 import { Observable } from 'rxjs';
 
@@ -20,16 +23,20 @@ export class ProductCreateComponent implements OnInit {
   form: UntypedFormGroup;
   image$: Observable<any>;
 
+  categories: Category[] = []
+
   constructor(
     private formBuilder: UntypedFormBuilder,
     private productsService: ProductsService,
     private router: Router,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private categoriesService:CategoriesService
   ) {
     this.buildForm();
   }
 
   ngOnInit() {
+    this.getCategories();
   }
 
   saveProduct(event: Event) {
@@ -44,37 +51,59 @@ export class ProductCreateComponent implements OnInit {
     }
   }
 
-  uploadFile(event) {
-    const file = event.target.files[0];
-    const name = 'image.png';
-    const fileRef = this.storage.ref(name);
-    const task = this.storage.upload(name, file);
+  private getCategories(){
+    this.categoriesService.getAllCategories()
+    .subscribe(cat => {
+      this.categories = cat;
+    })
+  }
 
-    task.snapshotChanges()
-    .pipe(
-      finalize(() => {
-        this.image$ = fileRef.getDownloadURL();
-        this.image$.subscribe(url => {
-          console.log(url);
-          this.form.get('image').setValue(url);
-        });
-      })
-    )
-    .subscribe();
+
+  uploadFile(event) {
+    const files = [...event.target.files] ;
+    files.forEach(item => {
+      const name = `${item.name}`;
+      const fileRef = this.storage.ref(name);
+      const task = this.storage.upload(name, item);
+      task.snapshotChanges()
+      .pipe(
+        finalize(() => {
+          this.image$ = fileRef.getDownloadURL();
+          this.image$.subscribe(url => {
+            const fileList = this.imagesField.value as string[]
+            this.imagesField.setValue([...fileList, url ])
+          });
+        })
+      )
+      .subscribe();
+    })
+
+    if (files) {
+      this.imagesField.setValue([] as string[])
+    }
+
   }
 
   private buildForm() {
     this.form = this.formBuilder.group({
-      id: ['', [Validators.required]],
-      title: ['', [Validators.required]],
+      title: ['', [Validators.required, Validators.minLength(4)]],
       price: ['', [Validators.required, MyValidators.isPriceValid]],
-      image: [''],
-      description: ['', [Validators.required]],
+      images: ['', Validators.required],
+      categoryId: [''],
+      description: ['', [Validators.required, Validators.minLength(4)]],
     });
   }
 
   get priceField() {
     return this.form.get('price');
+  }
+
+  get nameField(){
+    return this.form.get('title')
+  }
+
+  get imagesField(){
+    return this.form.get('images')
   }
 
 }

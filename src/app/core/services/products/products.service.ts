@@ -23,7 +23,7 @@ export class ProductsService {
   }
 
   createProduct(product: Product) {
-    return this.http.post(`${environment.url_api}/products`, product);
+    return this.http.post(`${environment.url_api}/products/`, product);
   }
 
   updateProduct(id: string, changes: Partial<Product>) {

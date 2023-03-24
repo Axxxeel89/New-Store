@@ -29,11 +29,25 @@
             </mat-form-field>
           </div>
         </div>
+        <div class="row">
+          <div class="col-xs">
+            <mat-form-field appearance="fill">
+              <mat-select formControlName="categoryId" >
+                <mat-option *ngFor="let category of categories" [value]="category.id">{{category.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs">
+            <img *ngIf="(image$ | async) as image" [src]="image" alt="">
+            <input type="file" (change)="uploadFile($event)">
+          </div>
+        </div>
       </mat-card-content>
       <mat-card-actions>
         <button [disabled]="form.invalid" mat-raised-button type="submit">Guardar</button>
       </mat-card-actions>
     </mat-card>
-    
+
   </form>
-  
